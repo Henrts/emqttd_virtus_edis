@@ -1,0 +1,15 @@
+deps/ecpool
+deps/emqttd
+deps/esockd
+deps/gen_conf
+deps/gen_logger
+deps/goldrush
+deps/gproc
+deps/lager
+deps/mochiweb
+*.o
+*.beam
+*.plt
+ebin/*.beam
+erl_crash.dump
+.rebar

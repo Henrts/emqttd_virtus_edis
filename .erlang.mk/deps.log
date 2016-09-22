@@ -1,0 +1,10 @@
+/home/osboxes/emqttd_virtus_redis/deps/eredis
+/home/osboxes/emqttd_virtus_redis/deps/ecpool
+/home/osboxes/emqttd_virtus_redis/deps/gproc
+/home/osboxes/emqttd_virtus_redis/deps/emqttd
+/home/osboxes/emqttd_virtus_redis/deps/lager
+/home/osboxes/emqttd_virtus_redis/deps/goldrush
+/home/osboxes/emqttd_virtus_redis/deps/gen_logger
+/home/osboxes/emqttd_virtus_redis/deps/gen_conf
+/home/osboxes/emqttd_virtus_redis/deps/esockd
+/home/osboxes/emqttd_virtus_redis/deps/mochiweb
