@@ -65,5 +65,5 @@ check_pass(PassHash, Password, HashType) ->
 hash(Type, Password) ->
     emqttd_virtus_mod:passwd_hash(Type, Password).
 
-description() -> "virtus.sene Redis and emqttd".
+description() -> "Authentication with Redis".
 

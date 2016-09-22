@@ -26,9 +26,9 @@
 start(_StartType, _StartArgs) ->
     gen_conf:init(?APP),
     {ok, Sup} = emqttd_virtus_redis_sup:start_link(),
-    emqttd_plugin_redis:load(),
+    emqttd_plugin_virtus_redis:load(),
     {ok, Sup}.
 
 stop(_State) ->
-    emqttd_plugin_redis:unload().
+    emqttd_plugin_virtus_redis:unload().
 

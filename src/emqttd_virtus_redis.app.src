@@ -1,7 +1,7 @@
 {application, emqttd_virtus_redis,
  [
   {description, "emqttd redis plugin - virtus.sense"},
-  {vsn, "1.0"},
+  {vsn, "2.0"},
   {modules, []},
   {registered, []},
   {applications, [
