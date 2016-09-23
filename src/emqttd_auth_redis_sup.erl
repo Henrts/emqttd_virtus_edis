@@ -14,21 +14,23 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_virtus_redis_app).
+-module(emqttd_auth_redis_sup).
 
--behaviour(application).
+-behaviour(supervisor).
 
--include("emqttd_virtus_redis.hrl").
+-include("emqttd_auth_redis.hrl").
 
-%% Application callbacks
--export([start/2, stop/1]).
+%% API
+-export([start_link/0]).
 
-start(_StartType, _StartArgs) ->
-    gen_conf:init(?APP),
-    {ok, Sup} = emqttd_virtus_redis_sup:start_link(),
-    emqttd_plugin_virtus_redis:load(),
-    {ok, Sup}.
+%% Supervisor callbacks
+-export([init/1]).
 
-stop(_State) ->
-    emqttd_plugin_virtus_redis:unload().
+start_link() ->
+    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
+
+init([]) ->
+    {ok, PoolEnv} = gen_conf:value(?APP, redis_pool),
+    PoolSpec = ecpool:pool_spec(?APP, ?APP, emqttd_auth_redis_client, PoolEnv),
+    {ok, {{one_for_one, 10, 100}, [PoolSpec]}}.
 

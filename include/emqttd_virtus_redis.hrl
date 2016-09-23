@@ -1,3 +1,3 @@
 
--define(APP, emqttd_virtus_redis).
+-define(APP, emqttd_auth_redis).
 
