@@ -14,11 +14,11 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_auth_redis_client).
+-module(emqttd_virtus_redis_client).
 
 -behaviour(ecpool_worker).
 
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_redis.hrl").
 
 -include_lib("emqttd/include/emqttd.hrl").
 

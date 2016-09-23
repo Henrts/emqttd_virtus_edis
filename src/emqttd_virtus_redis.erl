@@ -15,11 +15,9 @@
 %%--------------------------------------------------------------------
 
 %% @doc Authentication with Redis.
--module(emqttd_auth_redis).
+-module(emqttd_virtus_redis).
 
--behaviour(emqttd_auth_mod).
-
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_redis.hrl").
 
 -include_lib("emqttd/include/emqttd.hrl").
 
@@ -36,7 +34,7 @@ check(#mqtt_client{username = Username}, _Password, _State) when ?UNDEFINED(User
     {error, username_undefined};
 
 check(Client, Password, #state{super_cmd = SuperCmd}) when ?UNDEFINED(Password) ->
-    case emqttd_auth_redis_client:is_superuser(SuperCmd, Client) of
+    case emqttd_virtus_redis_client:is_superuser(SuperCmd, Client) of
         true  -> ok;
         false -> {error, password_undefined}
     end;
@@ -44,8 +42,8 @@ check(Client, Password, #state{super_cmd = SuperCmd}) when ?UNDEFINED(Password) 
 check(Client, Password, #state{super_cmd = SuperCmd,
                                auth_cmd  = AuthCmd,
                                hash_type = HashType}) ->
-    case emqttd_auth_redis_client:is_superuser(SuperCmd, Client) of
-        false -> case emqttd_auth_redis_client:query(AuthCmd, Client) of
+    case emqttd_virtus_redis_client:is_superuser(SuperCmd, Client) of
+        false -> case emqttd_virtus_redis_client:query(AuthCmd, Client) of
                      {ok, undefined} ->
                          {error, not_found};
                      {ok, HashPass} ->
@@ -63,7 +61,7 @@ check_pass(PassHash, Password, HashType) ->
     end.
 
 hash(Type, Password) ->
-    emqttd_auth_mod:passwd_hash(Type, Password).
+    emqttd_virtus_mod:passwd_hash(Type, Password).
 
 description() -> "Authentication with Redis".
 

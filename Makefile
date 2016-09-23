@@ -1,6 +1,6 @@
-PROJECT = emqttd_auth_redis
-PROJECT_DESCRIPTION = emqttd Authentication/ACL against Redis
-PROJECT_VERSION = 2.0
+PROJECT = emqttd_virtus_redis
+PROJECT_DESCRIPTION = emqttd Redis plugin - virtus.sense
+PROJECT_VERSION = 1.0
 
 DEPS = eredis ecpool emqttd gen_conf
 
