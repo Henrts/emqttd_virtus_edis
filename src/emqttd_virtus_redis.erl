@@ -17,6 +17,8 @@
 %% @doc Authentication with Redis.
 -module(emqttd_virtus_redis).
 
+-behaviour(emqttd_auth_mod).
+
 -include("emqttd_virtus_redis.hrl").
 
 -include_lib("emqttd/include/emqttd.hrl").
@@ -61,7 +63,7 @@ check_pass(PassHash, Password, HashType) ->
     end.
 
 hash(Type, Password) ->
-    emqttd_virtus_mod:passwd_hash(Type, Password).
+    emqttd_auth_mod:passwd_hash(Type, Password).
 
 description() -> "Authentication with Redis".
 

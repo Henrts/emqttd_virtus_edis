@@ -32,9 +32,14 @@
 load() ->
     lager:error("Connected ", []),
     {ok, SuperCmd} = gen_conf:value(?APP, supercmd),
+    ok = emqttd_access_control:register_mod(
+            auth, emqttd_virtus_redis, {SuperCmd, env(authcmd), env(password_hash)}),
+    ok = with_cmd_enabled(aclcmd, fun(AclCmd) ->
+            emqttd_access_control:register_mod(acl, emqttd_acl_redis, {SuperCmd, AclCmd, env(acl_nomatch)})
+        end),
     ok = with_cmd_enabled(subcmd, fun(SubCmd) ->
             emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [SubCmd]),
-	    emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [SubCmd])
+	       emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [SubCmd])
         end).
 
 env(Key) -> {ok, Val} = gen_conf:value(?APP, Key), Val.
@@ -63,7 +68,12 @@ on_message_publish(Message = #mqtt_message{topic = Topic}, _Env) ->
     {ok, Message}.
 
 unload() ->
-    emqttd:unhook('client.connected', fun ?MODULE:on_client_connected/3).
+    emqttd:unhook('client.connected', fun ?MODULE:on_client_connected/3),
+    emqttd:unhook('message.publish', fun ?MODULE:on_message_publish/2),
+    emqttd_access_control:unregister_mod(auth, emqttd_virtus_redis),
+    with_cmd_enabled(aclcmd, fun(_AclCmd) ->
+            emqttd_access_control:unregister_mod(acl, emqttd_acl_redis)
+        end).
 
 with_cmd_enabled(Name, Fun) ->
     case gen_conf:value(?APP, Name) of
