@@ -30,11 +30,6 @@
 %% Called when the plugin loaded
 load() ->
     {ok, SuperCmd} = gen_conf:value(?APP, supercmd),
-    ok = emqttd_access_control:register_mod(
-            auth, emqttd_virtus_sense_redis, {SuperCmd, env(authcmd), env(password_hash)}),
-    ok = with_cmd_enabled(aclcmd, fun(AclCmd) ->
-            emqttd_access_control:register_mod(acl, emqttd_acl_redis, {SuperCmd, AclCmd, env(acl_nomatch)})
-        end),
     ok = with_cmd_enabled(subcmd, fun(SubCmd) ->
             emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [SubCmd]),
             emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [SubCmd])
