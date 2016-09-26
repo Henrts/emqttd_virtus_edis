@@ -2,7 +2,7 @@ dddd/
 .rebar/
 .eunit/
 .erlang.mk/
-emqttd_auth_redis.d
+emqttd_virtus_sense_redis.d
 deps/
 ct.coverdata
 logs/

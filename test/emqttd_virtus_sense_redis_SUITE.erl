@@ -14,7 +14,7 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_auth_redis_SUITE).
+-module(emqttd_virtus_sense_redis_SUITE).
 
 -compile(export_all).
 
@@ -22,7 +22,7 @@
 
 -include_lib("common_test/include/ct.hrl").
 
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_sense_redis.hrl").
 
 -define(INIT_ACL, [{"mqtt_acl:test1", "publish topic1"},
                    {"mqtt_acl:test2", "subscribe topic2"},
@@ -32,10 +32,10 @@
                     {"mqtt_user:user1", "password", "testpwd"}]).
 
 all() -> 
-    [{group, emqttd_auth_redis}].
+    [{group, emqttd_virtus_sense_redis}].
 
 groups() -> 
-    [{emqttd_auth_redis, [sequence],
+    [{emqttd_virtus_sense_redis, [sequence],
      [check_acl,
       check_auth]}].
 
@@ -44,12 +44,12 @@ init_per_suite(Config) ->
     application:start(lager),
     application:set_env(emqttd, conf, filename:join([DataDir, "emqttd.conf"])),
     application:ensure_all_started(emqttd),
-    application:set_env(emqttd_auth_redis, conf, filename:join([DataDir, "emqttd_auth_redis.conf"])),
-    application:ensure_all_started(emqttd_auth_redis),
-    {ok, Connection} = ecpool_worker:client(gproc_pool:pick_worker({ecpool, emqttd_auth_redis})), [{connection, Connection} | Config].
+    application:set_env(emqttd_virtus_sense_redis, conf, filename:join([DataDir, "emqttd_virtus_sense_redis.conf"])),
+    application:ensure_all_started(emqttd_virtus_sense_redis),
+    {ok, Connection} = ecpool_worker:client(gproc_pool:pick_worker({ecpool, emqttd_virtus_sense_redis})), [{connection, Connection} | Config].
 
 end_per_suite(_Config) ->
-    application:stop(emqttd_auth_redis),
+    application:stop(emqttd_virtus_sense_redis),
     application:stop(ecpool),
     application:stop(eredis),
     application:stop(emqttd),

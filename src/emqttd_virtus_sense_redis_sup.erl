@@ -18,7 +18,7 @@
 
 -behaviour(supervisor).
 
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_sense_redis.hrl").
 
 %% API
 -export([start_link/0]).
@@ -31,6 +31,6 @@ start_link() ->
 
 init([]) ->
     {ok, PoolEnv} = gen_conf:value(?APP, redis_pool),
-    PoolSpec = ecpool:pool_spec(?APP, ?APP, emqttd_auth_redis_client, PoolEnv),
+    PoolSpec = ecpool:pool_spec(?APP, ?APP, emqttd_virtus_sense_redis_client, PoolEnv),
     {ok, {{one_for_one, 10, 100}, [PoolSpec]}}.
 

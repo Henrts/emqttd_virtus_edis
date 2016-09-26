@@ -1,4 +1,4 @@
-PROJECT = emqttd_auth_redis
+PROJECT = emqttd_virtus_sense_redis
 PROJECT_DESCRIPTION = emqttd Authentication/ACL against Redis
 PROJECT_VERSION = 2.0
 

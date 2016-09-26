@@ -16,7 +16,7 @@
 
 -module(emqttd_plugin_redis).
 
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_sense_redis.hrl").
 
 -include_lib("emqttd/include/emqttd.hrl").
 
@@ -30,7 +30,7 @@
 load() ->
     {ok, SuperCmd} = gen_conf:value(?APP, supercmd),
     ok = emqttd_access_control:register_mod(
-            auth, emqttd_auth_redis, {SuperCmd, env(authcmd), env(password_hash)}),
+            auth, emqttd_virtus_sense_redis, {SuperCmd, env(authcmd), env(password_hash)}),
     ok = with_cmd_enabled(aclcmd, fun(AclCmd) ->
             emqttd_access_control:register_mod(acl, emqttd_acl_redis, {SuperCmd, AclCmd, env(acl_nomatch)})
         end),
@@ -41,7 +41,7 @@ load() ->
 env(Key) -> {ok, Val} = gen_conf:value(?APP, Key), Val.
 
 on_client_connected(?CONNACK_ACCEPT, Client = #mqtt_client{client_pid = ClientPid}, SubCmd) ->
-    case emqttd_auth_redis_client:query(SubCmd, Client) of
+    case emqttd_virtus_sense_redis_client:query(SubCmd, Client) of
         {ok, Values}   -> emqttd_client:subscribe(ClientPid, topics(Values));
         {error, Error} -> lager:error("Redis Error: ~p, Cmd: ~p", [Error, SubCmd])
     end,
@@ -52,7 +52,7 @@ on_client_connected(_ConnAck, _Client, _LoadCmd) ->
 
 unload() ->
     emqttd:unhook('client.connected', fun ?MODULE:on_client_connected/3),
-    emqttd_access_control:unregister_mod(auth, emqttd_auth_redis),
+    emqttd_access_control:unregister_mod(auth, emqttd_virtus_sense_redis),
     with_cmd_enabled(aclcmd, fun(_AclCmd) ->
             emqttd_access_control:unregister_mod(acl, emqttd_acl_redis)
         end).

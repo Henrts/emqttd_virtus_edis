@@ -14,11 +14,11 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_auth_redis_app).
+-module(emqttd_virtus_sense_redis_app).
 
 -behaviour(application).
 
--include("emqttd_auth_redis.hrl").
+-include("emqttd_virtus_sense_redis.hrl").
 
 %% Application callbacks
 -export([start/2, stop/1]).
