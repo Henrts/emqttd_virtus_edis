@@ -25,7 +25,7 @@
 
 start(_StartType, _StartArgs) ->
     gen_conf:init(?APP),
-    {ok, Sup} = emqttd_auth_redis_sup:start_link(),
+    {ok, Sup} = emqttd_virtus_sense_redis_sup:start_link(),
     emqttd_plugin_redis:load(),
     {ok, Sup}.
 

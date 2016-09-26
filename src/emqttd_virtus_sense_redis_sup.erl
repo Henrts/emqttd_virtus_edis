@@ -14,7 +14,7 @@
 %% limitations under the License.
 %%--------------------------------------------------------------------
 
--module(emqttd_auth_redis_sup).
+-module(emqttd_virtus_sense_redis_sup).
 
 -behaviour(supervisor).
 
