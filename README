@@ -1,8 +1,8 @@
 
-emqttd_virtus_redis
+emqttd_auth_redis
 =================
 
-emqttd Redis Plugin - virtus.sense
+emqttd Redis Plugin
 
 Build Plugin
 ------------
@@ -14,7 +14,7 @@ make && make tests
 Configure Plugin
 ----------------
 
-File: etc/emqttd_virtus_redis.conf
+File: etc/emqttd_auth_redis.conf
 
 ```erlang
 {redis_pool, [

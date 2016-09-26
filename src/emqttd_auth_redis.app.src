@@ -1,6 +1,6 @@
-{application, emqttd_virtus_redis,
+{application, emqttd_auth_redis,
  [
-  {description, "emqttd redis plugin - virtus.sense"},
+  {description, "emqttd authentication against Redis"},
   {vsn, "2.0"},
   {modules, []},
   {registered, []},
@@ -10,6 +10,6 @@
                   eredis,
                   ecpool
                  ]},
-  {mod, { emqttd_virtus_redis_app, []}},
+  {mod, { emqttd_auth_redis_app, []}},
   {env, []}
  ]}.
