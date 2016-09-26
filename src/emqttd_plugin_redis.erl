@@ -52,8 +52,8 @@ on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env)
     {ok, Message};
 
 on_message_publish(Message = #mqtt_message{topic = Topic}, _Env) ->
-    %%lager:error("erlang received message ~p", [Topic]),
-    case emqttd_virtus_redis_client:query(["PUBLISH", Topic, Message]) of
+    lager:error("erlang received message ~p", [Topic]),
+    case emqttd_virtus_sense_redis_client:query(["PUBLISH", Topic, Message]) of
     {ok, Result} -> lager:error("RESULT ~p", [Result]);
     {error, Error2} -> lager:error("Redis Error Publish ~p, Cmd:", [Error2])
     end,
