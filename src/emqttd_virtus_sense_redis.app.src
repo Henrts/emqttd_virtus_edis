@@ -11,5 +11,5 @@
                   ecpool
                  ]},
   {mod, { emqttd_virtus_sense_redis_app, []}},
-  {env, []}
+  {env, [{conf, "etc/plugins/emqttd_virtus_sense_redis.conf"}]}
  ]}.

@@ -25,6 +25,7 @@
 -export([load/0, unload/0]).
 
 -export([on_client_connected/3]).
+-export([on_message_publish/2]).
 
 %% Called when the plugin loaded
 load() ->
@@ -35,7 +36,8 @@ load() ->
             emqttd_access_control:register_mod(acl, emqttd_acl_redis, {SuperCmd, AclCmd, env(acl_nomatch)})
         end),
     ok = with_cmd_enabled(subcmd, fun(SubCmd) ->
-            emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [SubCmd])
+            emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [SubCmd]),
+            emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [SubCmd])
         end).
 
 env(Key) -> {ok, Val} = gen_conf:value(?APP, Key), Val.
@@ -48,10 +50,23 @@ on_client_connected(?CONNACK_ACCEPT, Client = #mqtt_client{client_pid = ClientPi
     {ok, Client};
 
 on_client_connected(_ConnAck, _Client, _LoadCmd) ->
+    lager:error("emqttd_virtus_sense_redis plugin: client connected"),
     ok.
+
+on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
+    {ok, Message};
+
+on_message_publish(Message = #mqtt_message{topic = Topic}, _Env) ->
+    %%lager:error("erlang received message ~p", [Topic]),
+    case emqttd_virtus_redis_client:query(["PUBLISH", Topic, Message]) of
+    {ok, Result} -> lager:error("RESULT ~p", [Result]);
+    {error, Error2} -> lager:error("Redis Error Publish ~p, Cmd:", [Error2])
+    end,
+    {ok, Message}.
 
 unload() ->
     emqttd:unhook('client.connected', fun ?MODULE:on_client_connected/3),
+    emqttd:unhook('message.publish', fun ?MODULE:on_message_publish/2),
     emqttd_access_control:unregister_mod(auth, emqttd_virtus_sense_redis),
     with_cmd_enabled(aclcmd, fun(_AclCmd) ->
             emqttd_access_control:unregister_mod(acl, emqttd_acl_redis)
